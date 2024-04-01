@@ -7,23 +7,25 @@ public class RacingGame {
 
     private final List<Car> cars;
     private final MovingStrategy movingStrategy;
+    private final int tryNums;
 
-    public RacingGame(List<Car> cars, MovingStrategy movingStrategy) {
+    public RacingGame(List<Car> cars, MovingStrategy movingStrategy, int tryNums) {
         this.cars = cars;
         this.movingStrategy = movingStrategy;
+        this.tryNums = tryNums;
     }
 
-    public RacingGame(String carNames) {
-        this(carNames.split(","));
+    public RacingGame(String carNames, int tryNums) {
+        this(carNames.split(","), tryNums);
     }
 
-    public RacingGame(String[] carNames) {
+    private RacingGame(String[] carNames, int tryNums) {
         this(Arrays.stream(carNames)
                 .map(Car::new)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()), tryNums);
     }
-    public RacingGame(List<Car> cars) {
-        this(cars, new RandomStrategy());
+    public RacingGame(List<Car> cars, int tryNums) {
+        this(cars, new RandomStrategy(), tryNums);
     }
 
     public List<String> getWinners() {
@@ -63,5 +65,9 @@ public class RacingGame {
         return cars.stream()
                 .map(Car::display)
                 .collect(Collectors.toList());
+    }
+
+    public int getTryNums() {
+        return tryNums;
     }
 }

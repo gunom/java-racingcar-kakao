@@ -11,15 +11,34 @@ public class RacingGameView {
     public static final String DISPLAY_WINNER_FMT = "%s가 최종 우승했습니다.\n";
 
     public static String getCarNames() {
+        String carNames;
         System.out.println(INPUT_CAR_NAMES);
-        return getInput();
+        carNames = getInput();
+        while (carNames.isEmpty()) {
+            System.out.println("자동차 이름을 입력해주세요.");
+            carNames = getInput();
+        }
+        return carNames;
     }
 
     public static int getTryNums() {
+        int tryNum = -1;
+        while (tryNum == -1) {
+            tryNum = getInteger();
+        }
+        return tryNum;
+    }
+
+    private static Integer getInteger() {
         System.out.println(INPUT_TRY_NUMS);
-        int tryNums = Integer.parseInt(getInput());
-        System.out.println();
-        return tryNums;
+        try {
+            int tryNums = Integer.parseInt(getInput());
+            System.out.println();
+            return tryNums;
+        } catch (NumberFormatException e) {
+            System.out.println("숫자를 입력해주세요.");
+            return -1;
+        }
     }
 
     public static String getInput() {

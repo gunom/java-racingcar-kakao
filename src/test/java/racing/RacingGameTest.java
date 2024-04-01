@@ -10,7 +10,7 @@ public class RacingGameTest {
 
     @Test
     void commaSeperatedCarNames() {
-        RacingGame racingGame = new RacingGame("pobi,crong,honux");
+        RacingGame racingGame = new RacingGame("pobi,crong,honux", 5);
         List<Car> cars = racingGame.getCars();
         assertThat(cars.size()).isEqualTo(3);
         assertThat(cars.get(0).getName()).isEqualTo("pobi");
@@ -23,7 +23,7 @@ public class RacingGameTest {
         RacingGame racingGame = new RacingGame(
                 List.of(new Car("pobi", 4),
                 new Car("crong", 5),
-                new Car("honux", 5)));
+                new Car("honux", 5)), 5);
 
         List<String> winners = racingGame.getWinners();
 
@@ -39,7 +39,8 @@ public class RacingGameTest {
                 List.of(new Car("pobi", 0),
                         new Car("crong", 0),
                         new Car("honux", 0)),
-                rs
+                rs,
+                3
         );
         racingGame.moveCars();
         List<Car> cars = racingGame.getCars();
