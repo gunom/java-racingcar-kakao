@@ -39,13 +39,15 @@ public class CarTest {
     @Test
     void display() {
         Car car = new Car("pobi");
-        assertThat(car.display()).isEqualTo("pobi : -");
+        assertThat(car.getCarInfo().getCarName()).isEqualTo("pobi");
+        assertThat(car.getCarInfo().getCarPosition()).isEqualTo(0);
     }
 
     @Test
     void displayWhenPositionIs3() {
         Car car = new Car("pobi", 3);
-        assertThat(car.display()).isEqualTo("pobi : ----");
+        assertThat(car.getCarInfo().getCarName()).isEqualTo("pobi");
+        assertThat(car.getCarInfo().getCarPosition()).isEqualTo(3);
     }
 
     @Test

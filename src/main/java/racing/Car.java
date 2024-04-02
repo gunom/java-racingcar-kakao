@@ -33,7 +33,7 @@ public class Car {
         return position;
     }
 
-    public String display() {
-        return name + " : " + "-".repeat(position + 1);
+    public CarInfo getCarInfo() {
+        return new CarInfo(name, position);
     }
 }

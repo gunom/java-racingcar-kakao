@@ -2,16 +2,15 @@ package racing;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class RacingGame {
 
     private final List<Car> cars;
-    private final MovingStrategy movingStrategy;
     private final int tryNums;
 
-    public RacingGame(List<Car> cars, MovingStrategy movingStrategy, int tryNums) {
+    public RacingGame(List<Car> cars, int tryNums) {
         this.cars = cars;
-        this.movingStrategy = movingStrategy;
         this.tryNums = tryNums;
     }
 
@@ -24,24 +23,21 @@ public class RacingGame {
                 .map(Car::new)
                 .collect(Collectors.toList()), tryNums);
     }
-    public RacingGame(List<Car> cars, int tryNums) {
-        this(cars, new RandomStrategy(), tryNums);
-    }
 
     public List<String> getWinners() {
         Map<Integer, List<Car>> groupByPosition = cars.stream().collect(Collectors.groupingBy(Car::getPosition));
-        int winnerPosition = getWinnerPosition(groupByPosition);
+        int winnerPosition = getMaxPosition(groupByPosition);
         List<Car> winner =  getWinnerSortedByName(groupByPosition, winnerPosition);
-        return getWinnerNames(winner);
+        return extreactNames(winner);
     }
 
-    private List<String> getWinnerNames(List<Car> winner) {
-        return winner.stream()
+    private List<String> extreactNames(List<Car> cars) {
+        return cars.stream()
                 .map(Car::getName)
                 .collect(Collectors.toList());
     }
 
-    private int getWinnerPosition(Map<Integer, List<Car>> groupByPosition) {
+    private int getMaxPosition(Map<Integer, List<Car>> groupByPosition) {
         List<Integer> positions = new ArrayList<>(groupByPosition.keySet());
         positions.sort(Collections.reverseOrder());
         return positions.get(0);
@@ -53,21 +49,27 @@ public class RacingGame {
         return winners;
     }
 
-    public void moveCars() {
-        cars.forEach(car -> car.moveForward(movingStrategy.generateNumber()));
+    public List<List<CarInfo>> playRounds() {
+        List<List<CarInfo>> rounds = new ArrayList<>();
+        rounds.add(getCarsPositionInfos());
+        IntStream.range(0, tryNums).forEach(i -> {
+            moveCars();
+            rounds.add(getCarsPositionInfos());
+        });
+        return rounds;
+    }
+
+    private void moveCars() {
+        cars.forEach(car -> car.moveForward(new RandomStrategy().generateNumber()));
     }
 
     public List<Car> getCars() {
         return cars;
     }
 
-    public List<String> getCarsPositionInfos() {
+    public List<CarInfo> getCarsPositionInfos() {
         return cars.stream()
-                .map(Car::display)
+                .map(Car::getCarInfo)
                 .collect(Collectors.toList());
-    }
-
-    public int getTryNums() {
-        return tryNums;
     }
 }

@@ -1,5 +1,7 @@
 package view;
 
+import racing.CarInfo;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,11 +11,12 @@ public class RacingGameView {
     public static final String INPUT_TRY_NUMS = "시도할 회수는 몇회인가요?";
     public static final String RESULT = "실행 결과";
     public static final String DISPLAY_WINNER_FMT = "%s가 최종 우승했습니다.\n";
+    public static final String DISPLAY_CARS_FMT = "%s : %s";
+    public static final String DISPLAY_POSITION_FMT = "-";
 
     public static String getCarNames() {
-        String carNames;
         System.out.println(INPUT_CAR_NAMES);
-        carNames = getInput();
+        String carNames = getInput();
         while (carNames.isEmpty()) {
             System.out.println("자동차 이름을 입력해주세요.");
             carNames = getInput();
@@ -22,14 +25,6 @@ public class RacingGameView {
     }
 
     public static int getTryNums() {
-        int tryNum = -1;
-        while (tryNum == -1) {
-            tryNum = getInteger();
-        }
-        return tryNum;
-    }
-
-    private static Integer getInteger() {
         System.out.println(INPUT_TRY_NUMS);
         try {
             int tryNums = Integer.parseInt(getInput());
@@ -37,7 +32,7 @@ public class RacingGameView {
             return tryNums;
         } catch (NumberFormatException e) {
             System.out.println("숫자를 입력해주세요.");
-            return -1;
+            return getTryNums();
         }
     }
 
@@ -50,8 +45,12 @@ public class RacingGameView {
         System.out.println(RESULT);
     }
 
-    public static void displayCars(List<String> positionInfos) {
-        positionInfos.forEach(System.out::println);
+    public static void displayCars(List<CarInfo> positionInfos) {
+         positionInfos.forEach(info -> {
+            String position = DISPLAY_POSITION_FMT.repeat(info.getCarPosition());
+            System.out.printf(DISPLAY_CARS_FMT, info.getCarName(), position);
+            System.out.println();
+        });
         System.out.println();
     }
 
